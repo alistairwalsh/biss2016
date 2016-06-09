@@ -1,4 +1,4 @@
-M node:5-slim
+FROM node:5-slim
 
 EXPOSE 80
 
