@@ -43,13 +43,17 @@ USER jovyan
 WORKDIR /home/jovyan/
 
 # Python packages
-RUN conda install --yes numpy pandas scikit-learn scikit-image matplotlib scipy seaborn sympy cython patsy statsmodels cloudpickle dill numba bokeh beautifulsoup4 && conda clean -yt && \
+RUN conda install --yes numpy pandas scikit-learn scikit-image matplotlib scipy seaborn sympy cython patsy statsmodels cloudpickle dill numba bokeh beautifulsoup4 && \ 
+    conda clean -yt && \
+    pip install --user --no-cache-dir pydotplus && \
     pip install --user --no-cache-dir -e git+https://github.com/nipy/nipype#egg=nipype
 
 # Now for a python2 environment
-RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 ipykernel numpy pandas scikit-learn scikit-image matplotlib scipy seaborn sympy cython patsy statsmodels cloudpickle dill numba bokeh && conda clean -yt && \
+RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 ipykernel numpy pandas scikit-learn scikit-image matplotlib scipy seaborn sympy cython patsy statsmodels cloudpickle dill numba bokeh && \
+    conda clean -yt && \
     source activate python2 && \
     python -m ipykernel install --user && \
+    pip install --user --no-cache-dir pydotplus && \
     pip install --user --no-cache-dir -e git+https://github.com/nipy/nipype#egg=nipype
 
 # Extra Kernels
