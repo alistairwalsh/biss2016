@@ -1,23 +1,13 @@
 #!/bin/bash
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
 
-source /etc/profile.d/crn_neuro.sh
+set -e
 
-# Handle special flags if we're root
-if [ $UID == 0 ] ; then
-    # Change UID of NB_USER to NB_UID if it does not match
-    if [ "$NB_UID" != $(id -u $NB_USER) ] ; then
-        usermod -u $NB_UID $NB_USER
-        chown -R $NB_UID $CONDA_DIR
-    fi
-
-    # Enable sudo if requested
-    if [ ! -z "$GRANT_SUDO" ]; then
-        echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
-    fi
-
-    # Start the notebook server
-    exec su $NB_USER -c "env PATH=$PATH jupyter notebook $*"
+if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
+  # launched by JupyterHub, use single-user entrypoint
+  exec /usr/local/bin/start-singleuser.sh $*
 else
-    # Otherwise just exec the notebook
-    exec jupyter notebook $*
+  . /usr/local/bin/start.sh jupyter notebook $*
 fi
+

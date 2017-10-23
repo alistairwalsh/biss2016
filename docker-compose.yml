@@ -1,0 +1,8 @@
+version: '3'
+services:
+  notebook:
+    build: ./docker/notebook/
+    ports:
+     - "8888:8888"
+    volumes:
+     - "/home/ubuntu/data/images:/home/jovyan/work/images"
